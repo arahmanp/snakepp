@@ -52,10 +52,10 @@ public:
     Space() : height(SPACE_DEFAULT_HEIGHT), width(SPACE_DEFAULT_WIDTH), background(SPACE_DEFAULT_BG), 
         grid(height, std::vector<char>(width, background)) {}
 
-    void setPixelAtCell(Cell position, char c) {
+    void setPixelAtCell(Cell position, char texture) {
         auto [x, y] = position;
         if(x >= 0 && x < height && y >= 0 && y < width) {
-            grid[x][y] = c;
+            grid[x][y] = texture;
         }
     }
 
