@@ -6,28 +6,6 @@
 #include <sys/select.h>
 #include <unistd.h>
 
-bool kbhit() {
-    struct timeval tv = {0, 0};
-    fd_set fds;
-    FD_ZERO(&fds);
-    FD_SET(STDIN_FILENO, &fds);
-    return select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0;
-}
-
-void setNonBlockingMode(bool enable) {
-    static struct termios oldt, newt;
-    if (enable) {
-        tcgetattr(STDIN_FILENO, &oldt);
-        newt = oldt;
-        // Matikan ICANON (line buffering) dan ECHO (tampilan karakter)
-        newt.c_lflag &= ~(ICANON | ECHO);
-        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    } else {
-        // Kembalikan ke pengaturan semula
-        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    }
-}
-
 enum class Direction {
     North,
     East,
@@ -230,6 +208,28 @@ private:
     GameStatus status;
     int targetFps;
     int frameTime; // in millisecond
+
+    bool kbhit() {
+        struct timeval tv = {0, 0};
+        fd_set fds;
+        FD_ZERO(&fds);
+        FD_SET(STDIN_FILENO, &fds);
+        return select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0;
+    }
+
+    void setNonBlockingMode(bool enable) {
+        static struct termios oldt, newt;
+        if (enable) {
+            tcgetattr(STDIN_FILENO, &oldt);
+            newt = oldt;
+            // Matikan ICANON (line buffering) dan ECHO (tampilan karakter)
+            newt.c_lflag &= ~(ICANON | ECHO);
+            tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+        } else {
+            // Kembalikan ke pengaturan semula
+            tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+        }
+    }
 
     void clearScreen() {
         std::cout << "\033[2J\033[1;1H";
