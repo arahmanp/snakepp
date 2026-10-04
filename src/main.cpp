@@ -236,9 +236,11 @@ private:
                 else if(c == 'a') snake.changeDirection(Direction::West);
             }
 
+            snake.move(gameSpace.getHeight(), gameSpace.getWidth());
+
             render();
             print();
-            snake.move(gameSpace.getHeight(), gameSpace.getWidth());
+            
             std::this_thread::sleep_for(std::chrono::milliseconds(frameTime));
         }
     }
