@@ -78,7 +78,6 @@ class Snake {
 private:
     Cell head;
     std::vector<Cell> body;
-    Cell tail;
     Direction currentDirection;
     int length;
     char headSkin;
@@ -91,10 +90,9 @@ public:
         headSkin = '$';
         bodySkin = '#';
         currentDirection = Direction::East;
-        tail = {0, 1};
 
-        body.reserve(2);
-        for(int i = 0; i < length - 2; i++) {
+        body.reserve(length - 1);
+        for(int i = 0; i < length - 1; i++) {
             body.push_back({
                 head.x + dx[(static_cast<int>(currentDirection) + 2) % 4],
                 head.y + dy[(static_cast<int>(currentDirection) + 2) % 4],
@@ -110,18 +108,13 @@ public:
 
         currentDirection = direction;
 
-        tail = {
-            head.x + dx[(static_cast<int>(direction) + 2) % 4] * (length - 1),
-            head.y + dy[(static_cast<int>(direction) + 2) % 4] * (length - 1),
-        };
-
         body.clear();
-        body.reserve(length - 2);
-        for(int i = 0; i < length - 2; i++) {
-            body[i] = {
+        body.reserve(length - 1);
+        for(int i = 0; i < length - 1; i++) {
+            body.push_back({
                 head.x + dx[(static_cast<int>(direction) + 2) % 4],
-                head.y + dy[(static_cast<int>(direction) + 2) % 4]
-            };
+                head.y + dy[(static_cast<int>(direction) + 2) % 4],
+            });
         }
     }
 
@@ -131,10 +124,6 @@ public:
 
     std::vector<Cell> getBodyPosition() {
         return body;
-    }
-
-    Cell getTailPosition() {
-        return tail;
     }
 
     char getHeadSkin() {
@@ -187,8 +176,6 @@ private:
         for(auto cell : snake.getBodyPosition()) {
             gameSpace.setPixelAtCell(cell, snake.getBodySkin());
         }
-
-        gameSpace.setPixelAtCell(snake.getTailPosition(), snake.getBodySkin());
 
         gameSpace.setPixelAtCell(apple.getPosition(), apple.getTexture());
     }
