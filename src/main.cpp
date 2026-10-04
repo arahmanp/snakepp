@@ -48,6 +48,19 @@ struct Cell {
     int y;
 };
 
+const int SPACE_DEFAULT_HEIGHT = 10;
+const int SPACE_DEFAULT_WIDTH = 20;
+const char SPACE_DEFAULT_BG = '.';
+
+const Cell SNAKE_DEFAULT_HEAD_POSITION = {0, 4};
+const Direction SNAKE_DEFAULT_DIRECTION = Direction::East;
+const int SNAKE_DEFAULT_LENGTH = 4;
+const char SNAKE_DEFAULT_HEAD_SKIN = '$';
+const char SNAKE_DEFAULT_BODY_SKIN = '#';
+
+const Cell APPLE_DEFAULT_POSITION = {SPACE_DEFAULT_HEIGHT - 1, SPACE_DEFAULT_WIDTH - 1};
+const char APPLE_DEFAULT_TEXTURE = '@';
+
 class Space {
 private:
     int height;
@@ -56,7 +69,7 @@ private:
     std::vector<std::vector<char>> grid;
 
 public:
-    Space() : height(10), width(20), background('.'), 
+    Space() : height(SPACE_DEFAULT_HEIGHT), width(SPACE_DEFAULT_WIDTH), background(SPACE_DEFAULT_BG), 
         grid(height, std::vector<char>(width, background)) {}
 
     void setSpace(int height, int width, char background) {
@@ -110,11 +123,11 @@ private:
 
 public:
     Snake() {
-        head = {0, 4};
-        length = 4;
-        headSkin = '$';
-        bodySkin = '#';
-        currentDirection = Direction::East;
+        head = SNAKE_DEFAULT_HEAD_POSITION;
+        length = SNAKE_DEFAULT_LENGTH;
+        headSkin = SNAKE_DEFAULT_HEAD_SKIN;
+        bodySkin = SNAKE_DEFAULT_BODY_SKIN;
+        currentDirection = SNAKE_DEFAULT_DIRECTION;
 
         body.reserve(length - 1);
         Cell prevPosition = head;
@@ -187,7 +200,7 @@ private:
     char texture;
 
 public:
-    Apple() : position({9, 19}), texture('@') {}
+    Apple() : position(APPLE_DEFAULT_POSITION), texture(APPLE_DEFAULT_TEXTURE) {}
 
     void setSnake(Cell position, char texture) {
         this->position = position;
