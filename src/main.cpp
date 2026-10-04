@@ -2,6 +2,31 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <termios.h>
+#include <sys/select.h>
+#include <unistd.h>
+
+bool kbhit() {
+    struct timeval tv = {0, 0};
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
+    return select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv) > 0;
+}
+
+void setNonBlockingMode(bool enable) {
+    static struct termios oldt, newt;
+    if (enable) {
+        tcgetattr(STDIN_FILENO, &oldt);
+        newt = oldt;
+        // Matikan ICANON (line buffering) dan ECHO (tampilan karakter)
+        newt.c_lflag &= ~(ICANON | ECHO);
+        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    } else {
+        // Kembalikan ke pengaturan semula
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    }
+}
 
 enum class Direction {
     North,
@@ -208,7 +233,18 @@ private:
     }
 
     void gameLoop() {
-        while(1) {
+        while(status == GameStatus::Running) {
+            if(kbhit()) {
+                char c;
+                read(STDIN_FILENO, &c, 1);
+
+                if(c == 'q') status = GameStatus::Stopped;
+                else if(c == 'w') snake.changeDirection(Direction::North);
+                else if(c == 'd') snake.changeDirection(Direction::East);
+                else if(c == 's') snake.changeDirection(Direction::South);
+                else if(c == 'a') snake.changeDirection(Direction::West);
+            }
+
             render();
             print();
             snake.move(gameSpace.getHeight(), gameSpace.getWidth());
@@ -217,7 +253,7 @@ private:
     }
 
 public:
-    Game() : status(GameStatus::Running), targetFps(10), frameTime(1000 / targetFps) {}
+    Game() : status(GameStatus::Stopped), targetFps(10), frameTime(1000 / targetFps) {}
 
     void setTargetFps(int targetFps) {
         this->targetFps = targetFps;
@@ -225,9 +261,13 @@ public:
     }
 
     void run() {
-        while(status == GameStatus::Running) {
-            gameLoop();
-        }
+        setNonBlockingMode(true);
+
+        status = GameStatus::Running;
+
+        gameLoop();
+
+        setNonBlockingMode(false);
     }
 };
 
