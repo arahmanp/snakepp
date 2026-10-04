@@ -26,8 +26,8 @@ struct Cell {
     int y;
 };
 
-const int SPACE_DEFAULT_HEIGHT = 10;
-const int SPACE_DEFAULT_WIDTH = 20;
+const int SPACE_DEFAULT_HEIGHT = 13;
+const int SPACE_DEFAULT_WIDTH = 26;
 const char SPACE_DEFAULT_BG = '.';
 
 const Cell SNAKE_DEFAULT_HEAD_POSITION = {0, 4};
