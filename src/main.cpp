@@ -92,11 +92,13 @@ public:
         currentDirection = Direction::East;
 
         body.reserve(length - 1);
+        Cell prevPosition = head;
         for(int i = 0; i < length - 1; i++) {
             body.push_back({
-                head.x + dx[(static_cast<int>(currentDirection) + 2) % 4],
-                head.y + dy[(static_cast<int>(currentDirection) + 2) % 4],
+                prevPosition.x + dx[(static_cast<int>(currentDirection) + 2) % 4],
+                prevPosition.y + dy[(static_cast<int>(currentDirection) + 2) % 4],
             });
+            prevPosition = body[i];
         }
     }
 
@@ -110,11 +112,13 @@ public:
 
         body.clear();
         body.reserve(length - 1);
+        Cell prevPosition = head;
         for(int i = 0; i < length - 1; i++) {
             body.push_back({
-                head.x + dx[(static_cast<int>(direction) + 2) % 4],
-                head.y + dy[(static_cast<int>(direction) + 2) % 4],
+                prevPosition.x + dx[(static_cast<int>(direction) + 2) % 4],
+                prevPosition.y + dy[(static_cast<int>(direction) + 2) % 4],
             });
+            prevPosition = body[i];
         }
     }
 
