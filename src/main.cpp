@@ -52,13 +52,6 @@ public:
     Space() : height(SPACE_DEFAULT_HEIGHT), width(SPACE_DEFAULT_WIDTH), background(SPACE_DEFAULT_BG), 
         grid(height, std::vector<char>(width, background)) {}
 
-    void setSpace(int height, int width, char background) {
-        this->height = height;
-        this->width = width;
-        this->background = background;
-        grid.assign(height, std::vector<char>(width, background));
-    }
-
     void setPixelAtCell(Cell position, char c) {
         auto [x, y] = position;
         if(x >= 0 && x < height && y >= 0 && y < width) {
@@ -120,26 +113,6 @@ public:
         }
     }
 
-    void setSnake(Cell head, int length, char headSkin, char bodySkin, Direction direction) {
-        this->head = head;
-        this->length = length;
-        this->headSkin = headSkin;
-        this->bodySkin = bodySkin;
-
-        currentDirection = direction;
-
-        body.clear();
-        body.reserve(length - 1);
-        Cell prevPosition = head;
-        for(int i = 0; i < length - 1; i++) {
-            body.push_back({
-                prevPosition.x + dx[(static_cast<int>(direction) + 2) % 4],
-                prevPosition.y + dy[(static_cast<int>(direction) + 2) % 4],
-            });
-            prevPosition = body[i];
-        }
-    }
-
     Cell getHeadPosition() {
         return head;
     }
@@ -187,11 +160,6 @@ private:
 
 public:
     Apple() : position(APPLE_DEFAULT_POSITION), texture(APPLE_DEFAULT_TEXTURE) {}
-
-    void setSnake(Cell position, char texture) {
-        this->position = position;
-        this->texture = texture;
-    }
 
     Cell getPosition() {
         return position;
@@ -277,11 +245,6 @@ private:
 
 public:
     Game() : status(GameStatus::Stopped), targetFps(GAME_DEFAULT_TARGET_FPS), frameTime(1000 / targetFps) {}
-
-    void setTargetFps(int targetFps) {
-        this->targetFps = targetFps;
-        frameTime = 1000 / targetFps;
-    }
 
     void run() {
         setNonBlockingMode(true);
