@@ -137,6 +137,23 @@ public:
     char getBodySkin() {
         return bodySkin;
     }
+
+    void changeDirection(Direction newDirection) {
+        currentDirection = newDirection;
+    }
+
+    void move(int spaceHeight, int spaceWidth) {
+        for(int i = length - 2; i > 0; i--) {
+            body[i] = body[i - 1];
+        }
+
+        body[0] = head;
+
+        head = {
+            (head.x + dx[static_cast<int>(currentDirection)]) % spaceHeight,
+            (head.y + dy[static_cast<int>(currentDirection)]) % spaceWidth,
+        };
+    }
 };
 
 class Apple {
@@ -194,6 +211,7 @@ private:
         while(1) {
             render();
             print();
+            snake.move(gameSpace.getHeight(), gameSpace.getWidth());
             std::this_thread::sleep_for(std::chrono::milliseconds(frameTime));
         }
     }
