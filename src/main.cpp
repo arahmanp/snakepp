@@ -225,7 +225,9 @@ public:
     }
 
     void run() {
-        gameLoop();
+        while(status == GameStatus::Running) {
+            gameLoop();
+        }
     }
 };
 
