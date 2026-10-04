@@ -187,10 +187,16 @@ public:
 
         body[0] = head;
 
-        head = {
+        Cell newHead = {
             (head.x + dx[static_cast<int>(currentDirection)]) % spaceHeight,
             (head.y + dy[static_cast<int>(currentDirection)]) % spaceWidth,
         };
+
+        if(newHead.x < 0) newHead.x += spaceHeight;
+
+        if(newHead.y < 0) newHead.y += spaceWidth;
+
+        head = newHead;
     }
 };
 
