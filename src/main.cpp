@@ -39,6 +39,8 @@ const char SNAKE_DEFAULT_BODY_SKIN = '#';
 const Cell APPLE_DEFAULT_POSITION = {SPACE_DEFAULT_HEIGHT - 1, SPACE_DEFAULT_WIDTH - 1};
 const char APPLE_DEFAULT_TEXTURE = '@';
 
+const int GAME_DEFAULT_TARGET_FPS = 8;
+
 class Space {
 private:
     int height;
@@ -272,7 +274,7 @@ private:
     }
 
 public:
-    Game() : status(GameStatus::Stopped), targetFps(10), frameTime(1000 / targetFps) {}
+    Game() : status(GameStatus::Stopped), targetFps(GAME_DEFAULT_TARGET_FPS), frameTime(1000 / targetFps) {}
 
     void setTargetFps(int targetFps) {
         this->targetFps = targetFps;
