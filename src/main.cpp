@@ -29,6 +29,14 @@ int dy[] = {0, 1, 0, -1};
 struct Cell {
     int x;
     int y;
+
+    bool operator==(const Cell &otherCell) {
+        return (x == otherCell.x) && (y == otherCell.y);
+    }
+
+    bool operator!=(const Cell &otherCell) {
+        return (x != otherCell.x) || (y != otherCell.y);
+    }
 };
 
 const int SPACE_DEFAULT_HEIGHT = 13;
