@@ -26,18 +26,7 @@ enum class GameStatus {
 int dx[] = {-1, 0, 1, 0};
 int dy[] = {0, 1, 0, -1};
 
-struct Cell {
-    int x;
-    int y;
-
-    bool operator==(const Cell &otherCell) {
-        return (x == otherCell.x) && (y == otherCell.y);
-    }
-
-    bool operator!=(const Cell &otherCell) {
-        return (x != otherCell.x) || (y != otherCell.y);
-    }
-};
+using Cell = std::pair<int, int>;
 
 const int SPACE_DEFAULT_HEIGHT = 13;
 const int SPACE_DEFAULT_WIDTH = 26;
@@ -119,8 +108,8 @@ public:
         Cell prevPosition = head;
         for(int i = 0; i < length - 1; i++) {
             body.push_back({
-                prevPosition.x + dx[(static_cast<int>(currentDirection) + 2) % 4],
-                prevPosition.y + dy[(static_cast<int>(currentDirection) + 2) % 4],
+                prevPosition.first + dx[(static_cast<int>(currentDirection) + 2) % 4],
+                prevPosition.second + dy[(static_cast<int>(currentDirection) + 2) % 4],
             });
             prevPosition = body[i];
         }
@@ -154,24 +143,24 @@ public:
         body[0] = head;
 
         Cell newHead = {
-            (head.x + dx[static_cast<int>(currentDirection)]) % spaceHeight,
-            (head.y + dy[static_cast<int>(currentDirection)]) % spaceWidth,
+            (head.first + dx[static_cast<int>(currentDirection)]) % spaceHeight,
+            (head.second + dy[static_cast<int>(currentDirection)]) % spaceWidth,
         };
 
-        if(newHead.x < 0) newHead.x += spaceHeight;
+        if(newHead.first < 0) newHead.first += spaceHeight;
 
-        if(newHead.y < 0) newHead.y += spaceWidth;
+        if(newHead.second < 0) newHead.second += spaceWidth;
 
         head = newHead;
     }
 
-    void eat() {
-        int deltaX = body[length - 3].x - body[length - 2].x;
-        int deltaY = body[length - 3].y - body[length - 2].y;
+    Cell eat() {
+        int deltaX = body[length - 3].first - body[length - 2].first;
+        int deltaY = body[length - 3].second - body[length - 2].second;
 
         Cell newCell = {
-            body[length - 2].x - deltaX,
-            body[length - 2].y - deltaY,
+            body[length - 2].first - deltaX,
+            body[length - 2].second - deltaY,
         };
 
         length++;
