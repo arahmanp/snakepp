@@ -164,6 +164,20 @@ public:
 
         head = newHead;
     }
+
+    void eat() {
+        int deltaX = body[length - 3].x - body[length - 2].x;
+        int deltaY = body[length - 3].y - body[length - 2].y;
+
+        Cell newCell = {
+            body[length - 2].x - deltaX,
+            body[length - 2].y - deltaY,
+        };
+
+        length++;
+        body.reserve(length);
+        body.push_back(newCell);
+    }
 };
 
 class Apple {
