@@ -224,6 +224,7 @@ private:
 #endif
     }
 
+#ifndef _WIN32
     void setNonBlockingMode(bool enable) {
         static struct termios oldt, newt;
         if (enable) {
@@ -237,6 +238,7 @@ private:
             tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
         }
     }
+#endif
 
     void clearScreen() {
         std::cout << "\033[2J\033[1;1H";
@@ -308,13 +310,17 @@ public:
     }
 
     void run() {
+#ifndef _WIN32
         setNonBlockingMode(true);
+#endif
 
         status = GameStatus::Running;
 
         gameLoop();
 
+#ifndef _WIN32
         setNonBlockingMode(false);
+#endif
     }
 };
 
