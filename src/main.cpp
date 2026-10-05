@@ -1,6 +1,8 @@
 #include <chrono>
 #include <iostream>
+#include <set>
 #include <thread>
+#include <utility>
 #include <vector>
 
 #ifdef _WIN32
@@ -166,6 +168,8 @@ public:
         length++;
         body.reserve(length);
         body.push_back(newCell);
+
+        return newCell;
     }
 };
 
@@ -192,6 +196,7 @@ private:
     Snake snake;
     Apple apple;
     GameStatus status;
+    std::set<Cell> unusedCell;
     int targetFps;
     int frameTime; // in millisecond
 
@@ -253,6 +258,13 @@ private:
         gameSpace.clear();
     }
 
+    void checkSnakeEatApple() {
+        if(snake.getHeadPosition() == apple.getPosition()) {
+            Cell newCell = snake.eat();
+            unusedCell.erase(newCell);
+        }
+    }
+
     void gameLoop() {
         while(status == GameStatus::Running) {
             if(kbhit()) {
@@ -267,6 +279,8 @@ private:
 
             snake.move(gameSpace.getHeight(), gameSpace.getWidth());
 
+            checkSnakeEatApple();
+
             render();
             print();
             
@@ -275,7 +289,23 @@ private:
     }
 
 public:
-    Game() : status(GameStatus::Stopped), targetFps(GAME_DEFAULT_TARGET_FPS), frameTime(1000 / targetFps) {}
+    Game() {
+        status = GameStatus::Stopped;
+        targetFps = GAME_DEFAULT_TARGET_FPS;
+        frameTime = 1000 / targetFps;
+
+        for(int i = 0; i < gameSpace.getHeight(); i++) {
+            for(int j = 0; j < gameSpace.getWidth(); j++) {
+                unusedCell.insert({i, j});
+            }
+        }
+
+        unusedCell.erase(snake.getHeadPosition());
+
+        for(auto cell : snake.getBodyPosition()) {
+            unusedCell.erase(cell);
+        }
+    }
 
     void run() {
         setNonBlockingMode(true);
