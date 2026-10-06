@@ -139,7 +139,9 @@ public:
         currentDirection = newDirection;
     }
 
-    void move(int spaceHeight, int spaceWidth) {
+    void move(int spaceHeight, int spaceWidth, std::set<Cell> &unusedCell) {
+        unusedCell.insert(body.back());
+
         for(int i = length - 2; i > 0; i--) {
             body[i] = body[i - 1];
         }
@@ -156,6 +158,7 @@ public:
         if(newHead.second < 0) newHead.second += spaceWidth;
 
         head = newHead;
+        unusedCell.erase(head);
     }
 
     Cell eat() {
@@ -300,7 +303,7 @@ private:
                 else if(c == 'a') snake.changeDirection(Direction::West);
             }
 
-            snake.move(gameSpace.getHeight(), gameSpace.getWidth());
+            snake.move(gameSpace.getHeight(), gameSpace.getWidth(), unusedCell);
 
             checkSnakeEatApple();
 
