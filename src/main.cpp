@@ -61,6 +61,10 @@ void clearScreen() {
     std::cout << "\033[2J\033[1;1H";
 }
 
+void sleepFor(int duration) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(duration));
+}
+
 enum class Direction {
     North,
     East,
@@ -333,7 +337,7 @@ private:
 
             std::cout << "Your score is : " << score << '\n';
             
-            std::this_thread::sleep_for(std::chrono::milliseconds(frameTime));
+            sleepFor(frameTime);
         }
     }
 
@@ -373,10 +377,35 @@ public:
     }
 };
 
-int main() {
-    Game game;
+void splashScreen() {
+    std::cout << '\n';
 
-    game.run();
+    std::cout <<
+                 "  ███████╗███╗   ██╗ █████╗ ██╗  ██╗███████╗\n"
+                 "  ██╔════╝████╗  ██║██╔══██╗██║ ██╔╝██╔════╝\n"
+                 "  ███████╗██╔██╗ ██║███████║█████╔╝ █████╗  \n"
+                 "  ╚════██║██║╚██╗██║██╔══██║██╔═██╗ ██╔══╝  \n"
+                 "  ███████║██║ ╚████║██║  ██║██║  ██╗███████╗\n"
+                 "  ╚══════╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝\n\n";
+
+    std::cout << "                    v0.1.0                  \n\n";
+    std::cout << "      A Terminal-based Classic Snake Game   \n";
+
+    sleepFor(2000);
+
+    clearScreen();
+}
+
+void snakepp() {
+    clearScreen();
+
+    splashScreen();
+
+    std::cout << "Welcome to Snake++, A Terminal-based Classic Snake Game.\n";
+}
+
+int main() {
+    snakepp();
 
     return 0;
 }
