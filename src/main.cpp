@@ -41,8 +41,10 @@ char readChar() {
 #endif
 }
 
-#ifndef _WIN32
 void setNonBlockingMode(bool enable) {
+#ifdef _WIN32
+    return;
+#else
     static struct termios oldt, newt;
     if (enable) {
         tcgetattr(STDIN_FILENO, &oldt);
@@ -54,8 +56,8 @@ void setNonBlockingMode(bool enable) {
         // Kembalikan ke pengaturan semula
         tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
     }
-}
 #endif
+}
 
 void clearScreen() {
     std::cout << "\033[2J\033[1;1H";
@@ -361,17 +363,9 @@ public:
     }
 
     int run() {
-#ifndef _WIN32
-        setNonBlockingMode(true);
-#endif
-
         status = GameStatus::Running;
 
         gameLoop();
-
-#ifndef _WIN32
-        setNonBlockingMode(false);
-#endif
 
         return score;
     }
@@ -413,6 +407,8 @@ void menu() {
 }
 
 void snakepp() {
+    setNonBlockingMode(true);
+
     clearScreen();
 
     splashScreen();
@@ -420,6 +416,8 @@ void snakepp() {
     welcome();
 
     menu();
+
+    setNonBlockingMode(false);
 }
 
 int main() {
