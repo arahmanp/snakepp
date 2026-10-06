@@ -363,9 +363,13 @@ public:
     }
 
     int run() {
+        setNonBlockingMode(true);
+
         status = GameStatus::Running;
 
         gameLoop();
+
+        setNonBlockingMode(false);
 
         return score;
     }
@@ -391,6 +395,8 @@ void splashScreen() {
 }
 
 void welcome() {
+    clearScreen();
+
     std::cout << "Snake++\n\n";
 
     std::cout << "A Terminal-based Classic Snake Game\n";
@@ -406,18 +412,46 @@ void menu() {
     std::cout << "[Q] Quit\n";
 }
 
-void snakepp() {
-    setNonBlockingMode(true);
+void play() {
+    clearScreen();
+
+    Game game;
+    int score;
+
+    std::cout << "Control\n";
+    std::cout << "W : Go up\n";
+    std::cout << "A : Go left\n";
+    std::cout << "S : Go down\n";
+    std::cout << "D : Go right\n";
+    std::cout << "Q : End the game\n";
+
+    std::cout << '\n';
+
+    std::cout << "Your game will start in 5 seconds.\n";
+
+    sleepFor(3000);
+
+    std::cout << "Get ready...\n";
+
+    sleepFor(2000);
 
     clearScreen();
 
+    score = game.run();
+
+    std::cout << '\n';
+
+    std::cout << "Your final score is " << score << "\n\n";
+
+    sleepFor(5000);
+}
+
+void snakepp() {
     splashScreen();
 
     welcome();
 
     menu();
-
-    setNonBlockingMode(false);
 }
 
 int main() {
