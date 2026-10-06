@@ -406,10 +406,10 @@ void welcome() {
 }
 
 void menu() {
-    std::cout << "[P] Play\n";
-    std::cout << "[S] Setting\n";
-    std::cout << "[A] About\n";
-    std::cout << "[Q] Quit\n";
+    std::cout << "[1] Play\n";
+    std::cout << "[2] Setting\n";
+    std::cout << "[3] About\n";
+    std::cout << "[4] Quit\n";
 }
 
 void play() {
@@ -449,9 +449,28 @@ void play() {
 void snakepp() {
     splashScreen();
 
-    welcome();
+    int option;
 
-    menu();
+    do {
+        welcome();
+        menu();
+
+        std::cout << "\nChoose your option: ";
+        std::cin >> option;
+
+        switch (option) {
+            case 1: 
+                play();
+                break;
+            
+            case 4:
+                break;
+            
+            default:
+                std::cout << "This option is not finished yet.\n";
+                sleepFor(2000);
+        }
+    }while (option != 4);
 }
 
 int main() {
