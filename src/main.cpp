@@ -145,6 +145,7 @@ private:
     int length;
     char headSkin;
     char bodySkin;
+    bool isAlive = true;
 
 public:
     Snake() {
@@ -181,6 +182,10 @@ public:
         return bodySkin;
     }
 
+    bool getSnakeStatus() {
+        return isAlive;
+    }
+
     void changeDirection(Direction newDirection) {
         int newDirectionInt = static_cast<int>(newDirection);
         int currentDirectionInt = static_cast<int>(currentDirection);
@@ -191,6 +196,18 @@ public:
     }
 
     void move(int spaceHeight, int spaceWidth, std::set<Cell> &unusedCell) {
+        Cell newHead = {
+            (head.first + dx[static_cast<int>(currentDirection)]) % spaceHeight,
+            (head.second + dy[static_cast<int>(currentDirection)]) % spaceWidth,
+        };
+
+        for(auto cell : body) {
+            if(cell == newHead) {
+                isAlive = false;
+                return;
+            }
+        }
+
         unusedCell.insert(body.back());
 
         for(int i = length - 2; i > 0; i--) {
@@ -198,11 +215,6 @@ public:
         }
 
         body[0] = head;
-
-        Cell newHead = {
-            (head.first + dx[static_cast<int>(currentDirection)]) % spaceHeight,
-            (head.second + dy[static_cast<int>(currentDirection)]) % spaceWidth,
-        };
 
         if(newHead.first < 0) newHead.first += spaceHeight;
 
@@ -299,7 +311,7 @@ private:
     }
 
     void gameLoop() {
-        while(status == GameStatus::Running) {
+        while(status == GameStatus::Running && snake.getSnakeStatus()) {
             if(kbhit()) {
                 char c = readChar();
 
