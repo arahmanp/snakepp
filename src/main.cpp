@@ -1,5 +1,7 @@
 #include <chrono>
 #include <iostream>
+#include <iterator>
+#include <random>
 #include <set>
 #include <thread>
 #include <utility>
@@ -185,6 +187,10 @@ public:
         return position;
     }
 
+    void setPosition(Cell pos) {
+        position = pos;
+    }
+
     char getTexture() {
         return texture;
     }
@@ -264,7 +270,22 @@ private:
         if(snake.getHeadPosition() == apple.getPosition()) {
             Cell newCell = snake.eat();
             unusedCell.erase(newCell);
+            generateRandomApple();
         }
+    }
+
+    void generateRandomApple() {
+        int numUnusedCell = unusedCell.size();
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dist(0, numUnusedCell - 1);
+
+        int cellIdx = dist(gen);
+
+        Cell applePosition = *std::next(unusedCell.begin(), cellIdx);
+
+        apple.setPosition(applePosition);
     }
 
     void gameLoop() {
