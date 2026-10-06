@@ -1,4 +1,5 @@
 #include <chrono>
+#include <cstdlib>
 #include <iostream>
 #include <iterator>
 #include <random>
@@ -181,7 +182,12 @@ public:
     }
 
     void changeDirection(Direction newDirection) {
-        currentDirection = newDirection;
+        int newDirectionInt = static_cast<int>(newDirection);
+        int currentDirectionInt = static_cast<int>(currentDirection);
+
+        if(abs(newDirectionInt - currentDirectionInt) != 2) {
+            currentDirection = newDirection;
+        }
     }
 
     void move(int spaceHeight, int spaceWidth, std::set<Cell> &unusedCell) {
