@@ -271,6 +271,7 @@ private:
     std::set<Cell> unusedCell;
     int targetFps;
     int frameTime; // in millisecond
+    int score = 0;
 
     void render() {
         gameSpace.setPixelAtCell(snake.getHeadPosition(), snake.getHeadSkin());
@@ -291,6 +292,7 @@ private:
     void checkSnakeEatApple() {
         if(snake.getHeadPosition() == apple.getPosition()) {
             Cell newCell = snake.eat();
+            score += 100;
             unusedCell.erase(newCell);
             generateRandomApple();
         }
@@ -328,6 +330,8 @@ private:
 
             render();
             print();
+
+            std::cout << "Your score is : " << score << '\n';
             
             std::this_thread::sleep_for(std::chrono::milliseconds(frameTime));
         }
@@ -352,7 +356,7 @@ public:
         }
     }
 
-    void run() {
+    int run() {
 #ifndef _WIN32
         setNonBlockingMode(true);
 #endif
@@ -364,6 +368,8 @@ public:
 #ifndef _WIN32
         setNonBlockingMode(false);
 #endif
+
+        return score;
     }
 };
 
