@@ -396,12 +396,21 @@ void splashScreen() {
     clearScreen();
 }
 
+void welcome() {
+    std::cout << "Snake++\n\n";
+
+    std::cout << "A Terminal-based Classic Snake Game\n";
+    std::cout << "v0.1.0\n\n";
+
+    std::cout << "Made with love by Andhika Rahman\n\n";
+}
+
 void snakepp() {
     clearScreen();
 
     splashScreen();
 
-    std::cout << "Welcome to Snake++, A Terminal-based Classic Snake Game.\n";
+    welcome();
 }
 
 int main() {
