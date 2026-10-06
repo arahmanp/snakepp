@@ -405,12 +405,21 @@ void welcome() {
     std::cout << "Made with love by Andhika Rahman\n\n";
 }
 
+void menu() {
+    std::cout << "[P] Play\n";
+    std::cout << "[S] Setting\n";
+    std::cout << "[A] About\n";
+    std::cout << "[Q] Quit\n";
+}
+
 void snakepp() {
     clearScreen();
 
     splashScreen();
 
     welcome();
+
+    menu();
 }
 
 int main() {
