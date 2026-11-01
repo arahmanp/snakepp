@@ -360,6 +360,8 @@ public:
 };
 
 void splashScreen() {
+  clearScreen();
+
   std::cout << '\n';
 
   std::cout << "  ███████╗███╗   ██╗ █████╗ ██╗  ██╗███████╗\n"
